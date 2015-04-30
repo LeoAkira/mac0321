@@ -6,7 +6,6 @@ public class Batalha extends Controller {
 	private class Rodada extends Event {
 
 		public boolean action(Treinador primeiro, Treinador segundo) {
-			int i;
 			int resposta1;
 			int resposta2;
 
@@ -30,27 +29,27 @@ public class Batalha extends Controller {
 			resposta2 = scanIn2.nextInt();
 			scanIn2.close();
 
-			if (resposta1 == 4){
+			if (resposta1 == 4) {
 				run(primeiro);
 				return false;
 			}
-			if (resposta2 == 4){
+			if (resposta2 == 4) {
 				run(segundo);
 				return false;
 			}
-			if (resposta1 == 3){
+			if (resposta1 == 3) {
 				trocar(primeiro);
 			}
-			if (resposta2 == 3){
+			if (resposta2 == 3) {
 				trocar(segundo);
 			}
-			if (resposta1 == 2){
+			if (resposta1 == 2) {
 				bag(primeiro);
 			}
-			if (resposta2 == 2){
+			if (resposta2 == 2) {
 				bag(segundo);
 			}
-			if (resposta1 == 1){
+			if (resposta1 == 1) {
 				if (resposta2 == 1) {
 					fight2(primeiro, segundo);
 					if (!algumVivo(primeiro))
@@ -58,139 +57,141 @@ public class Batalha extends Controller {
 					if (!algumVivo(segundo))
 						return false;
 					return true;
-				}
-				else {
+				} else {
 					fight1(primeiro, segundo);
 					if (!algumVivo(segundo))
 						return false;
 				}
-				
+
 			}
 			if (resposta2 == 1) {
 				fight1(segundo, primeiro);
-				if(!algumVivo(primeiro))
+				if (!algumVivo(primeiro))
 					return false;
 			}
 			return true;
-	}
+		}
 
-	public void fight1(Treinador atac, Treinador def) {
-		int resposta;
-		resposta = escolherAtaque(atac);
-		atacar(atac, def, resposta);
-	}
+		public void fight1(Treinador atac, Treinador def) {
+			int resposta;
+			resposta = escolherAtaque(atac);
+			atacar(atac, def, resposta);
+		}
 
-	public void fight2(Treinador prim, Treinador seg) {
-		int resp1;
-		int resp2;
-		int prio1;
-		int prio2;
+		public void fight2(Treinador prim, Treinador seg) {
+			int resp1;
+			int resp2;
+			int prio1;
+			int prio2;
 
-		resp1 = escolherAtaque(prim);
-		resp2 = escolherAtaque(seg);
+			resp1 = escolherAtaque(prim);
+			resp2 = escolherAtaque(seg);
 
-		prio1 = prim.pokemonAtivo.moves[resp1].prioridade;
-		prio2 = seg.pokemonAtivo.moves[resp2].prioridade;
+			prio1 = prim.pokemonAtivo.moves[resp1].prioridade;
+			prio2 = seg.pokemonAtivo.moves[resp2].prioridade;
 
-		if (prio1 >= prio2) {
-			atacar(prim, seg, resp1);
-			if (seg.pokemonAtivo.vivo) {
-				atacar(seg, prim, resp2);
-			} else
-				this.trocar(seg);
-		} else {
-			atacar(seg, prim, resp2);
-			if (prim.pokemonAtivo.vivo) {
+			if (prio1 >= prio2) {
 				atacar(prim, seg, resp1);
-			} else
-				this.trocar(prim);
-		}
-	}
-
-	public void atacar(Treinador atac, Treinador def, int resp) {
-		atac.pokemonAtivo.moves[resp].attack(def.pokemonAtivo);
-		System.out.println(def.pokemonAtivo.name + " HP: "
-				+ def.pokemonAtivo.Hp + "/" + def.pokemonAtivo.maxHp);
-		if (def.pokemonAtivo.Hp == 0) {
-			System.out.println(def.pokemonAtivo.name + " has fainted.");
-			def.pokemonAtivo.vivo = false;
-		}
-	}
-
-	public int escolherAtaque(Treinador blado) {
-		int resposta;
-		int i;
-		System.out.println("What will " + blado.pokemonAtivo.name + " do?");
-		for (i = 0; i < 4; i++) {
-			System.out.println(i + 1 + ": " + blado.pokemonAtivo.moves[i].name);
+				if (seg.pokemonAtivo.vivo) {
+					atacar(seg, prim, resp2);
+				} else
+					this.trocar(seg);
+			} else {
+				atacar(seg, prim, resp2);
+				if (prim.pokemonAtivo.vivo) {
+					atacar(prim, seg, resp1);
+				} else
+					this.trocar(prim);
+			}
 		}
 
-		Scanner scanIn = new Scanner(System.in);
-		resposta = scanIn.nextInt();
-		scanIn.close();
-		return resposta;
-	}
-
-	public void run(Treinador arregao) {
-		System.out.println(arregao.name + " has fled.");
-	}
-
-	public void bag(Treinador t) {
-		int resp1;
-		int resp2;
-		int i;
-		System.out.println("Which item do you want to use?");
-		System.out.println("1: Potion (restores 20 HP)");
-		System.out.println("2: Hyper Potion (restores 50 HP");
-
-		Scanner scanIn = new Scanner(System.in);
-		resp1 = scanIn.nextInt();
-		scanIn.close();
-
-		System.out.println("On which Pokemon do you want to use this?");
-		for (i = 0; i < 6; i++) {
-			System.out.println((i + 1) + ": " + t.pokemons[i].name);
+		public void atacar(Treinador atac, Treinador def, int resp) {
+			atac.pokemonAtivo.moves[resp].attack(def.pokemonAtivo);
+			System.out.println(def.pokemonAtivo.nickname + " HP: "
+					+ def.pokemonAtivo.Hp + "/" + def.pokemonAtivo.maxHp);
+			if (def.pokemonAtivo.Hp == 0) {
+				System.out.println(def.pokemonAtivo.nickname + " has fainted.");
+				def.pokemonAtivo.vivo = false;
+			}
 		}
 
-		Scanner scanIn2 = new Scanner(System.in);
-		resp2 = scanIn2.nextInt() - 1;
-		scanIn2.close();
+		public int escolherAtaque(Treinador blado) {
+			int resposta;
+			int i;
+			System.out.println("What will " + blado.pokemonAtivo.nickname
+					+ " do?");
+			for (i = 0; i < 4; i++) {
+				System.out.println(i + 1 + ": "
+						+ blado.pokemonAtivo.moves[i].name);
+			}
 
-		if (resp1 == 1) {
-			if (t.pokemons[resp2].Hp + 20 > t.pokemons[resp2].maxHp)
-				t.pokemons[resp2].Hp = t.pokemons[resp2].maxHp;
-			else
-				t.pokemons[resp2].Hp += 20;
+			Scanner scanIn = new Scanner(System.in);
+			resposta = scanIn.nextInt();
+			scanIn.close();
+			return resposta;
 		}
-		if (resp1 == 2) {
-			if (t.pokemons[resp2].Hp + 50 > t.pokemons[resp2].maxHp)
-				t.pokemons[resp2].Hp = t.pokemons[resp2].maxHp;
-			else
-				t.pokemons[resp2].Hp += 50;
-		}
-		System.out.println(t.pokemons[resp2].name + " HP: "
-				+ t.pokemons[resp2].Hp + "/" + t.pokemons[resp2].maxHp);
-	}
 
-	public void trocar(Treinador t) {
-		int i;
-		int resp;
-		System.out.println("Para qual pokemon deseja trocar?");
-		for (i = 0; i < 6; i++) {
-			System.out.println((i + 1) + ": " + t.pokemons[i].name);
+		public void run(Treinador arregao) {
+			System.out.println(arregao.name + " has fled.");
 		}
-		Scanner scanIn = new Scanner(System.in);
-		resp = scanIn.nextInt();
-		scanIn.close();
-		t.pokemonAtivo = t.pokemons[resp - 1];
-	}
 
-	public boolean algumVivo(Treinador t) {
-		int i;
-		for (i = 0; i < 6; i++) {
-			if (t.pokemons[i].vivo)
-				return true;
+		public void bag(Treinador t) {
+			int resp1;
+			int resp2;
+			int i;
+			System.out.println("Which item do you want to use?");
+			System.out.println("1: Potion (restores 20 HP)");
+			System.out.println("2: Hyper Potion (restores 50 HP");
+
+			Scanner scanIn = new Scanner(System.in);
+			resp1 = scanIn.nextInt();
+			scanIn.close();
+
+			System.out.println("On which Pokemon do you want to use this?");
+			for (i = 0; i < 6; i++) {
+				System.out.println((i + 1) + ": " + t.pokemons[i].nickname);
+			}
+
+			Scanner scanIn2 = new Scanner(System.in);
+			resp2 = scanIn2.nextInt() - 1;
+			scanIn2.close();
+
+			if (resp1 == 1) {
+				if (t.pokemons[resp2].Hp + 20 > t.pokemons[resp2].maxHp)
+					t.pokemons[resp2].Hp = t.pokemons[resp2].maxHp;
+				else
+					t.pokemons[resp2].Hp += 20;
+			}
+			if (resp1 == 2) {
+				if (t.pokemons[resp2].Hp + 50 > t.pokemons[resp2].maxHp)
+					t.pokemons[resp2].Hp = t.pokemons[resp2].maxHp;
+				else
+					t.pokemons[resp2].Hp += 50;
+			}
+			System.out.println(t.pokemons[resp2].nickname + " HP: "
+					+ t.pokemons[resp2].Hp + "/" + t.pokemons[resp2].maxHp);
 		}
-		return false;
+
+		public void trocar(Treinador t) {
+			int i;
+			int resp;
+			System.out.println("Para qual pokemon deseja trocar?");
+			for (i = 0; i < 6; i++) {
+				System.out.println((i + 1) + ": " + t.pokemons[i].nickname);
+			}
+			Scanner scanIn = new Scanner(System.in);
+			resp = scanIn.nextInt();
+			scanIn.close();
+			t.pokemonAtivo = t.pokemons[resp - 1];
+		}
+
+		public boolean algumVivo(Treinador t) {
+			int i;
+			for (i = 0; i < 6; i++) {
+				if (t.pokemons[i].vivo)
+					return true;
+			}
+			return false;
+		}
 	}
 }
