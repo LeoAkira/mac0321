@@ -176,6 +176,7 @@ public class Batalha extends Controller {
 			resp = scanIn.nextInt();
 			scanIn.close();
 			t.pokemonAtivo = t.pokemons[resp - 1];
+			return true;
 		}
 	}
 
