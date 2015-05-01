@@ -3,9 +3,7 @@ package controlador;
 import java.util.Scanner;
 
 public class Batalha extends Controller {
-	private class Rodada extends Event {
-
-		public boolean action(Treinador primeiro, Treinador segundo) {
+		/*public boolean action(Treinador primeiro, Treinador segundo) {
 			int resposta1;
 			int resposta2;
 
@@ -70,19 +68,27 @@ public class Batalha extends Controller {
 					return false;
 			}
 			return true;
-		}
+		}*/
 
-		public void fight1(Treinador atac, Treinador def) {
+	public class Fight1 extends Event {
+		public boolean action (Treinador atac, Treinador def) {
 			int resposta;
 			resposta = escolherAtaque(atac);
 			atacar(atac, def, resposta);
+			if(!algumVivo(def))
+				return false;
+			return true;
 		}
+	}
 
-		public void fight2(Treinador prim, Treinador seg) {
+	private class Fight2 extends Event {
+		public boolean action (Treinador prim, Treinador seg) {
 			int resp1;
 			int resp2;
 			int prio1;
 			int prio2;
+			Trocar t = new Trocar();
+			
 
 			resp1 = escolherAtaque(prim);
 			resp2 = escolherAtaque(seg);
@@ -95,47 +101,31 @@ public class Batalha extends Controller {
 				if (seg.pokemonAtivo.vivo) {
 					atacar(seg, prim, resp2);
 				} else
-					this.trocar(seg);
+					t.action(seg, prim);
+					
 			} else {
 				atacar(seg, prim, resp2);
 				if (prim.pokemonAtivo.vivo) {
 					atacar(prim, seg, resp1);
 				} else
-					this.trocar(prim);
+					t.action(prim, seg);
 			}
+			
+			if (!algumVivo(prim) || !algumVivo(seg))
+				return false;
+			return true;
 		}
+	}
 
-		public void atacar(Treinador atac, Treinador def, int resp) {
-			atac.pokemonAtivo.moves[resp].attack(def.pokemonAtivo);
-			System.out.println(def.pokemonAtivo.nickname + " HP: "
-					+ def.pokemonAtivo.Hp + "/" + def.pokemonAtivo.maxHp);
-			if (def.pokemonAtivo.Hp == 0) {
-				System.out.println(def.pokemonAtivo.nickname + " has fainted.");
-				def.pokemonAtivo.vivo = false;
-			}
-		}
-
-		public int escolherAtaque(Treinador blado) {
-			int resposta;
-			int i;
-			System.out.println("What will " + blado.pokemonAtivo.nickname
-					+ " do?");
-			for (i = 0; i < 4; i++) {
-				System.out.println(i + 1 + ": "
-						+ blado.pokemonAtivo.moves[i].name);
-			}
-
-			Scanner scanIn = new Scanner(System.in);
-			resposta = scanIn.nextInt();
-			scanIn.close();
-			return resposta;
-		}
-
-		public void run(Treinador arregao) {
+	private class Run extends Event {
+		public boolean action (Treinador arregao, Treinador vencedor) {
 			System.out.println(arregao.name + " has fled.");
+			return false;
 		}
+	}
 
-		public void bag(Treinador t) {
+	private class Bag extends Event {
+		public boolean action (Treinador t, Treinador esperando) {
 			int resp1;
 			int resp2;
 			int i;
@@ -170,9 +160,12 @@ public class Batalha extends Controller {
 			}
 			System.out.println(t.pokemons[resp2].nickname + " HP: "
 					+ t.pokemons[resp2].Hp + "/" + t.pokemons[resp2].maxHp);
+			return true;
 		}
+	}
 
-		public void trocar(Treinador t) {
+	private class Trocar extends Event {
+		public boolean action (Treinador t, Treinador esperando) {
 			int i;
 			int resp;
 			System.out.println("Para qual pokemon deseja trocar?");
@@ -184,14 +177,40 @@ public class Batalha extends Controller {
 			scanIn.close();
 			t.pokemonAtivo = t.pokemons[resp - 1];
 		}
+	}
 
-		public boolean algumVivo(Treinador t) {
-			int i;
-			for (i = 0; i < 6; i++) {
-				if (t.pokemons[i].vivo)
-					return true;
-			}
-			return false;
+	public boolean algumVivo(Treinador t) {
+		int i;
+		for (i = 0; i < 6; i++) {
+			if (t.pokemons[i].vivo)
+				return true;
 		}
+		return false;
+	}
+	
+	public void atacar(Treinador atac, Treinador def, int resp) {
+		atac.pokemonAtivo.moves[resp].attack(def.pokemonAtivo);
+		System.out.println(def.pokemonAtivo.nickname + " HP: "
+				+ def.pokemonAtivo.Hp + "/" + def.pokemonAtivo.maxHp);
+		if (def.pokemonAtivo.Hp == 0) {
+			System.out.println(def.pokemonAtivo.nickname + " has fainted.");
+			def.pokemonAtivo.vivo = false;
+		}
+	}
+
+	public int escolherAtaque(Treinador blado) {
+		int resposta;
+		int i;
+		System.out.println("What will " + blado.pokemonAtivo.nickname
+				+ " do?");
+		for (i = 0; i < 4; i++) {
+			System.out.println(i + 1 + ": "
+					+ blado.pokemonAtivo.moves[i].name);
+		}
+
+		Scanner scanIn = new Scanner(System.in);
+		resposta = scanIn.nextInt();
+		scanIn.close();
+		return resposta;
 	}
 }
