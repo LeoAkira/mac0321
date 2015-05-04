@@ -8,5 +8,6 @@ public class Treinador {
 		this.name = nome;
 		this.pokemons = pokemons;
 		this.pokemonAtivo = pokemons[0];
+		this.pokemons[0].ativo = true;
 	}
 }
