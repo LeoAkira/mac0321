@@ -1,4 +1,4 @@
-package ex2;
+package controlador;
 
 import java.util.Scanner;
 
