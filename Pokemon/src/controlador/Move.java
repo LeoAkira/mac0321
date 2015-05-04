@@ -11,6 +11,10 @@ public class Move {
 		this.prioridade = prioridade;
 	}
 	void attack(Pokemon atacado){
+		if (damage >= atacado.Hp){
+			atacado.Hp = 0;
+			atacado.vivo = false;
+		} else
 		atacado.Hp -= damage;
 	}
 }
