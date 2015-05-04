@@ -110,6 +110,80 @@ public class Controller {
 		}
 	}
 	
+	public void run (Scanner scanIn, boolean ex2) {
+		Event e;
+
+		Pokemon[] pkmnRed = new Pokemon[6];
+
+		Move[] movPik = new Move[4];
+		movPik[0] = new Move("Charm", 0, 2);
+		movPik[1] = new Move("Quick Attack", 40, 1);
+		movPik[2] = new Move("Thunderbolt", 90, 2);
+		movPik[3] = new Move("Thunder", 110, 2);
+		pkmnRed[0] = new Pokemon("Pikachu", 206, movPik);
+
+		Move[] movEsp = new Move[4];
+		movEsp[0] = new Move("Mud-Slap", 20, 2);
+		movEsp[1] = new Move("Swift", 60, 2);
+		movEsp[2] = new Move("Reflect", 0, 2);
+		movEsp[3] = new Move("Psychic", 90, 2);
+		pkmnRed[1] = new Pokemon("Espeon", 200, movEsp);
+
+		Move[] movSnr = new Move[4];
+		movSnr[0] = new Move("Amnesia", 0, 2);
+		movSnr[1] = new Move("Snore", 0, 2);
+		movSnr[2] = new Move("Rest", 0, 2);
+		movSnr[3] = new Move("Body Slam", 85, 2);
+		pkmnRed[2] = new Pokemon("Snorlax", 385, movSnr);
+
+		Move[] movVns = new Move[4];
+		movVns[0] = new Move("Sunny Day", 0, 2);
+		movVns[1] = new Move("Giga Drain", 75, 2);
+		movVns[2] = new Move("Synthesis", 0, 2);
+		movVns[3] = new Move("Solar Beam", 120, 2);
+		pkmnRed[3] = new Pokemon("Venusaur", 271, movVns);
+
+		Move[] movCrz = new Move[4];
+		movCrz[0] = new Move("Flamethrower", 90, 2);
+		movCrz[1] = new Move("Wing Attack", 60, 2);
+		movCrz[2] = new Move("Slash", 70, 2);
+		movCrz[3] = new Move("Fire Spin", 105, 2);
+		pkmnRed[4] = new Pokemon("Charizard", 271, movCrz);
+
+		Move[] movBlst = new Move[4];
+		movBlst[0] = new Move("Rain Dance", 0, 2);
+		movBlst[1] = new Move("Surf", 95, 2);
+		movBlst[2] = new Move("Blizzard", 120, 2);
+		movBlst[3] = new Move("Whirlpool", 105, 2);
+		pkmnRed[5] = new Pokemon("Blastoise", 258, movBlst);
+
+		Treinador red = new Treinador("Red", pkmnRed);
+		
+		Pokemon[] pkmn2 = new Pokemon[1];
+		
+		Move[] mov2 = new Move[4];
+		mov2[0] = new Move("Sing", 0, 2);
+		mov2[1] = new Move("Pound", 40, 2);
+		mov2[2] = new Move("Double Slap", 30, 2);
+		mov2[3] = new Move("Wake-up Slap", 70, 2);
+		pkmn2[0] = new Pokemon("Jigglypuff", 115, mov2);
+		
+		
+		Treinador jig = new Treinador("Jigglypuff", pkmn2);
+		jig.selvagem = true;
+		
+		boolean continua = true;
+		Batalha bt = new Batalha();
+		
+		System.out.println("\n\nA wild " + jig.pokemonAtivo.name + " appeared!\n");
+		while (continua) {
+			e = bt.new Rodada(red, jig, scanIn);
+			continua = e.action(red, jig);
+		}
+		
+	}
+	
+	
 	static Scanner scanIn;
 	
 	public static void main(String[] args) {
